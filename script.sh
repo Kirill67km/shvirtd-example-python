@@ -17,4 +17,6 @@ echo 'Устанавливаю зависимости'
 pip install -r requirements.txt || exit 1
 
 echo 'Запускаю приложение'
-python main.py
+nohup python main.py > /dev/null 2>&1 &
+
+echo 'Процесс запущен в фоновом режиме'
