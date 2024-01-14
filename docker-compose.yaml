@@ -1,0 +1,37 @@
+version: '3'
+
+services:
+  web:
+    build: .
+    image: cr.yandex/crpnus2ffsn51d10k5id/shvirtd-example-python:hello
+    ports:
+      - "8080:5000"  # Маппинг портов: 8080 на хосте к 5000 внутри контейнера
+    networks:
+      backend:
+        ipv4_address: 172.21.0.5
+    restart: always
+    environment:
+      - MYSQL_HOST=db
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=password
+      - MYSQL_DB=example
+
+  db:
+    image: mysql:8
+    networks:
+      backend:
+        ipv4_address: 172.21.0.10
+    restart: unless-stopped
+    environment:
+      - MYSQL_ROOT_PASSWORD=root_password
+      - MYSQL_DATABASE=example
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=password
+
+networks:
+  backend:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: "172.21.0.0/16"
