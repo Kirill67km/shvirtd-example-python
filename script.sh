@@ -1,11 +1,20 @@
 #!/bin/bash
 echo 'Запускаю скрипт'
 echo 'Изменяю директорию на /opt'
-cd /opt
+cd /opt || exit 1
+
 echo 'Копирую репозиторий со сборкой'
-git clone https://github.com/Kirill67km/shvirtd-example-python.git
-echo 'Начинаю выполнять команды для запуска'
-python3 -m venv venv  # on Windows, use "python -m venv venv" instead
-. venv/bin/activate   # on Windows, use "venv\Scripts\activate" instead
-pip install -r requirements.txt
+sudo git clone https://github.com/Kirill67km/shvirtd-example-python.git || exit 1
+
+echo 'Переход в директорию проекта'
+cd shvirtd-example-python || exit 1
+
+echo 'Создаю и активирую виртуальное окружение'
+python3 -m venv venv || exit 1
+source venv/bin/activate || exit 1
+
+echo 'Устанавливаю зависимости'
+pip install -r requirements.txt || exit 1
+
+echo 'Запускаю приложение'
 python main.py
